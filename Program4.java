@@ -14,11 +14,11 @@ public class Program4 {
 
         Scanner kb = new Scanner(System.in);
         SpellChecker dictionary = new SpellChecker();
-
+        boolean loop;  
+        
         // set dictionary 
         
-        boolean loop; // controls do while loops  
-        
+        // dictionary FileNotFoundException loop 
         do{
         loop = false;    
         System.out.print("Enter a dictonary file: ");
@@ -34,6 +34,8 @@ public class Program4 {
         }while(loop == true); 
 
         // set word list file 
+        
+        // word list FileNotFoundException loop
         do{
             
         loop = false; 
@@ -44,14 +46,12 @@ public class Program4 {
         
         // controls print statement for no misspellings
         Boolean misspelled = false;  
-        
+       
         // read word list and check for misspellings 
-        try {
-            
-            Scanner readFile = new Scanner(wordListFile); 
+        try (Scanner readFile = new Scanner(wordListFile)){ 
             
             // check for any misspelled words before requesting output file 
-            while (readFile.hasNext()) {
+            while (readFile.hasNext()){
                 if (!dictionary.checkSpelling(readFile.nextLine())) {
                     misspelled = true;
                     break; // short cercuit while loop 
@@ -86,8 +86,8 @@ public class Program4 {
 public static void setOutPutFile(Scanner readFile, SpellChecker dictionary){
         
         Scanner kb = new Scanner(System.in); 
-        boolean loop = false;  
-        boolean innerLoop = false; 
+        boolean loop;  
+        boolean innerLoop; 
         String filename; 
         String choice; // for overwriting existing files 
         
@@ -95,6 +95,7 @@ public static void setOutPutFile(Scanner readFile, SpellChecker dictionary){
         
     // loop for FileNotFoundException   
     do{
+        
         // loop for files that already exist. 
         do{
         loop = false; 
@@ -103,6 +104,7 @@ public static void setOutPutFile(Scanner readFile, SpellChecker dictionary){
         
        // make sure file does not exist.  
        File file = new File(filename); 
+       
        if(file.exists()){
            System.out.println("The file "+filename+" already exists.");
            
@@ -125,26 +127,37 @@ public static void setOutPutFile(Scanner readFile, SpellChecker dictionary){
               System.out.println("Invalid input");
                     innerLoop = true; 
                }
+                 
             }while(innerLoop == true); 
           }
        
         }while(loop == true); 
         
-        try{
-            // creates an output file 
-            PrintWriter outputfile = new PrintWriter(filename); 
-
+        
+        // creates an output file 
+        try (PrintWriter outputfile = new PrintWriter(filename)){ 
+            
+        
+        
             while (readFile.hasNext()) {
-                
+              
                 // write words not in dictionary 
-                if(!dictionary.checkSpelling(readFile.nextLine())){
-                    outputfile.println(readFile.nextLine()); 
+              String currentLine = readFile.nextLine();
+              
+                if(!dictionary.checkSpelling(currentLine)){
+                    outputfile.println(currentLine); 
                 }
+            }
                 
                 System.out.println("Misspelled words have been add to "+
                         filename+".");
-                outputfile.close(); 
-            }
+                
+                   //close file being checked 
+                   readFile.close(); 
+                   
+                   //close file holding misspeled words 
+                   outputfile.close(); 
+            
             
             /*If the given string does not denote an existing, 
               writable regular file and a new regular file of that name 

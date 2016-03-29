@@ -6,15 +6,14 @@ package SpellChecker;
  * Program 4 - DoublyLinkedBag
  * CSC230-02 Spring 2016
  */
+
 public final class DoublyLinkedBag<T> implements BagInterface<T> {
  private DoublyLinkedNode firstNode; 
- private DoublyLinkedNode lastNode; 
  private int CurrentSize; 
  
  public DoublyLinkedBag(){
      
      firstNode = null;  
-     lastNode = null; 
      CurrentSize = 0; 
  }
     @Override
@@ -35,21 +34,29 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
        
        if(isEmpty()){
         firstNode = newNode; 
-        lastNode = newNode; 
+        CurrentSize++; 
+        return true; 
             }
        
        // adding from the front of the list 
-       // lastNode continues to point to first 'newNode' entered 
        
-       else{
-       newNode.setNextNode(firstNode); 
-       firstNode.setPrevNode(newNode);
-       firstNode = newNode; 
-       }
-       CurrentSize++; 
-       
-       return true; 
-        }
+      else {
+        
+            try{
+                 newNode.setNextNode(firstNode);
+                 firstNode.setPrevNode(newNode); 
+                 firstNode = newNode;
+                 CurrentSize++; 
+                 return true; 
+           
+                }catch(OutOfMemoryError e){
+                 System.out.println(e.getMessage());
+                 System.exit(0); 
+                }
+        } 
+      
+       return false; 
+    }
 
 	
     @Override
@@ -63,18 +70,15 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
          // firstNode now points to second node in list 
          firstNode = firstNode.getNextNode(); 
          
-         // if list is now empty 
-         if(firstNode == null)
-            lastNode = null; 
          
          // dereference node to be removed 
-         else {
-             // node to remove references nothing 
-             firstNode.getPrevNode().setNextNode(null);
+      
+         // node to remove references nothing 
+         firstNode.getPrevNode().setNextNode(null);
              
-             // new firstNode dereferences node to remove 
-             firstNode.setPrevNode(null);
-         }
+        // new firstNode dereferences node to remove 
+        firstNode.setPrevNode(null);
+        
               
          CurrentSize--; 
          }
@@ -92,7 +96,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
      DoublyLinkedNode removeThisNode = getReferenceTo(anEntry);  
      
      // anEntry on fistNode
-     if(removeThisNode.getPrevNode()==null){  
+    /* if(removeThisNode.getPrevNode()==null){  
          
          // firstNode now points to second node in list  
          firstNode = firstNode.getNextNode(); 
@@ -136,7 +140,8 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
          CurrentSize--; 
          return true; 
          
-     }
+     }*/
+     
        // dereference node to be removed 
        removeThisNode.getPrevNode().setNextNode(removeThisNode.getNextNode());
        
@@ -186,26 +191,35 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
         if(isEmpty())
             return currentNode; 
         
-        for(int i = 0; i < CurrentSize; i++){
-           if(anEntry.equals(currentNode.getData())){
-               return currentNode; 
-           } 
-           else currentNode = currentNode.getNextNode(); 
+        else{
+            
+            int count = 0;
+            
+            while(count < CurrentSize && currentNode !=null){
+          
+                if(anEntry.equals(currentNode.getData())){
+                    return currentNode; 
+                } 
+                
+                else currentNode = currentNode.getNextNode(); 
+                count++;
+                
+                }
         }
            return currentNode; 
-        }
+    }
        
         
     @Override
     public T[] toArray(){
         
-          T[] result = (T[])new Object[CurrentSize]; // Unchecked Cast? 
+          T[] result = (T[])new Object[CurrentSize];  
           DoublyLinkedNode currentNode = firstNode; 
           
           if(isEmpty()) 
               return result; 
           
-          for(int i = 0; i < CurrentSize; i++){ // try catch nullPointer? 
+          for(int i = 0; i < CurrentSize; i++){ 
               
              result[i] = currentNode.getData(); 
              

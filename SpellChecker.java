@@ -3,6 +3,7 @@ package SpellChecker;
 
 import java.util.Scanner;
 import java.io.*; 
+import java.util.Arrays;
 /*  
  * Author: Nathaniel Clay Arnold
  * Program 4 - SpellChecker
@@ -18,17 +19,19 @@ public class SpellChecker {
     }
     
     public boolean setDictionary(File correctWordFile){
-        
-      try{
           
-      Scanner readFile = new Scanner(correctWordFile);  
-      
-         while(readFile.hasNext()){
-            correctWords.add(readFile.nextLine());
-         }
-      }
-      
-      catch(FileNotFoundException e){  
+    try (Scanner readFile = new Scanner(correctWordFile)) {
+        
+              while(readFile.hasNext()){
+                  if(!correctWords.add(readFile.nextLine())){
+                      System.out.println("Could not add words to Dictionary.");
+                      System.exit(0);
+                  }
+              }
+              System.out.println(Arrays.toString(correctWords.toArray()));
+              readFile.close();
+              
+    }catch(FileNotFoundException e){  
       return false; 
       }
      
@@ -37,9 +40,9 @@ public class SpellChecker {
     
     public boolean checkSpelling(String word){
         
-      word = word.toLowerCase(); 
+      String words = word.toLowerCase(); 
       
-      return correctWords.contains(word);    
+      return correctWords.contains(words);    
     }
     
     public int count(){
