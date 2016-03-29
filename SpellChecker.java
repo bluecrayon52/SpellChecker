@@ -20,6 +20,7 @@ public class SpellChecker {
     public boolean setDictionary(File correctWordFile){
         
       try{
+          
       Scanner readFile = new Scanner(correctWordFile);  
       
          while(readFile.hasNext()){
@@ -27,7 +28,7 @@ public class SpellChecker {
          }
       }
       
-      catch(FileNotFoundException e){
+      catch(FileNotFoundException e){  
       return false; 
       }
      

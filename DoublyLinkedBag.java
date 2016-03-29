@@ -198,6 +198,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
         
     @Override
     public T[] toArray(){
+        
           T[] result = (T[])new Object[CurrentSize]; // Unchecked Cast? 
           DoublyLinkedNode currentNode = firstNode; 
           
@@ -213,7 +214,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
           return result; 
         }
 
-//	public Object[] toArray(); // Alternate
+
 
 private class DoublyLinkedNode{ // Private nested inner class 
     private T data; 
