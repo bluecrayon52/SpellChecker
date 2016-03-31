@@ -9,11 +9,13 @@ package SpellChecker;
 
 public final class DoublyLinkedBag<T> implements BagInterface<T> {
  private DoublyLinkedNode firstNode; 
+ private DoublyLinkedNode lastNode; 
  private int CurrentSize; 
  
  public DoublyLinkedBag(){
      
-     firstNode = null;  
+     firstNode = null;
+     lastNode = null; 
      CurrentSize = 0; 
  }
     @Override
@@ -33,7 +35,8 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
        DoublyLinkedNode newNode = new DoublyLinkedNode(newEntry);  
        
        if(isEmpty()){
-        firstNode = newNode; 
+        firstNode = newNode;
+        lastNode = newNode; 
         CurrentSize++; 
         return true; 
             }
@@ -62,23 +65,30 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
     @Override
     public T remove(){
         
-         T result = null; 
+         T result = null;
          
+         // check to see if list is already empty 
          if(firstNode !=null){
          result = firstNode.getData(); 
          
-         // firstNode now points to second node in list 
+         /*firstNode now points to second node in list
+           or is null*/ 
          firstNode = firstNode.getNextNode(); 
          
+         //if null, the list is now empty 
+         if(firstNode == null)
+            lastNode = null;
+            
          
-         // dereference node to be removed 
-      
+              
+       // otherwise, dereference node to be removed 
+         else{
          // node to remove references nothing 
          firstNode.getPrevNode().setNextNode(null);
              
         // new firstNode dereferences node to remove 
         firstNode.setPrevNode(null);
-        
+         }
               
          CurrentSize--; 
          }
@@ -89,14 +99,15 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
 
     @Override
     public boolean remove(T anEntry){
-      
+        
+       // checks if list contains anEntry, but also if it's empty 
        if(!contains(anEntry)) 
          return false; 
     
      DoublyLinkedNode removeThisNode = getReferenceTo(anEntry);  
      
      // anEntry on fistNode
-    /* if(removeThisNode.getPrevNode()==null){  
+    if(removeThisNode.getPrevNode()==null){  
          
          // firstNode now points to second node in list  
          firstNode = firstNode.getNextNode(); 
@@ -140,7 +151,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
          CurrentSize--; 
          return true; 
          
-     }*/
+     }
      
        // dereference node to be removed 
        removeThisNode.getPrevNode().setNextNode(removeThisNode.getNextNode());
@@ -152,6 +163,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
        
        removeThisNode.setNextNode(null);
        
+       CurrentSize--; 
        return true; 
    }
 	
@@ -188,6 +200,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
         
         DoublyLinkedNode currentNode = firstNode; 
         
+        // 
         if(isEmpty())
             return currentNode; 
         
@@ -216,6 +229,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
           T[] result = (T[])new Object[CurrentSize];  
           DoublyLinkedNode currentNode = firstNode; 
           
+          // nullPointerException 
           if(isEmpty()) 
               return result; 
           
@@ -234,19 +248,16 @@ private class DoublyLinkedNode{ // Private nested inner class
     private T data; 
     private DoublyLinkedNode prev; 
     private DoublyLinkedNode next; 
-    
+   
+   
    private DoublyLinkedNode(){ 
      this(null,null,null); 
    }
-     
-    
-    
+  
     private DoublyLinkedNode(T data){
       this(null, data, null); 
     }
    
-     
-
     private DoublyLinkedNode(DoublyLinkedNode prev, T data, DoublyLinkedNode next){
      this.data = data; 
      this.prev = prev; 

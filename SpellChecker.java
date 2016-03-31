@@ -9,6 +9,7 @@ import java.util.Arrays;
  * Program 4 - SpellChecker
  * CSC230-02 Spring 2016
  */
+
 public class SpellChecker {
     
     private BagInterface<String> correctWords; 
@@ -23,7 +24,7 @@ public class SpellChecker {
     try (Scanner readFile = new Scanner(correctWordFile)) {
         
               while(readFile.hasNext()){
-                  if(!correctWords.add(readFile.nextLine())){
+                  if(!correctWords.add(readFile.nextLine().toLowerCase())){
                       System.out.println("Could not add words to Dictionary.");
                       System.exit(0);
                   }

@@ -70,7 +70,7 @@ public class Program4 {
             else /* call seperate method to handle seperate 
                     FileNotFoundException within seperate do while loop. */ 
                 
-                setOutPutFile(readFile, dictionary);  
+                setOutPutFile(wordListFile, dictionary);  
                  
             } catch (FileNotFoundException e){
                 
@@ -83,8 +83,10 @@ public class Program4 {
         
  }
     
-public static void setOutPutFile(Scanner readFile, SpellChecker dictionary){
+public static void setOutPutFile(File wordListFile, SpellChecker dictionary) 
+        throws FileNotFoundException{ // throws error back to Program4 
         
+        Scanner readFile = new Scanner(wordListFile); // new readfile Scanner
         Scanner kb = new Scanner(System.in); 
         boolean loop;  
         boolean innerLoop; 
@@ -137,11 +139,11 @@ public static void setOutPutFile(Scanner readFile, SpellChecker dictionary){
         // creates an output file 
         try (PrintWriter outputfile = new PrintWriter(filename)){ 
             
-        
-        
+         // write misspelled words to output file 
             while (readFile.hasNext()) {
               
-                // write words not in dictionary 
+              /* use same line for read and write, 
+               prevent extra token consumption */ 
               String currentLine = readFile.nextLine();
               
                 if(!dictionary.checkSpelling(currentLine)){
