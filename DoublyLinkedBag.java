@@ -8,10 +8,11 @@ package SpellChecker;
  */
 
 public final class DoublyLinkedBag<T> implements BagInterface<T> {
- private DoublyLinkedNode firstNode; 
- private DoublyLinkedNode lastNode; 
+ private DoublyLinkedNode firstNode; //points to first node 
+ private DoublyLinkedNode lastNode; // points to last node,used in remove methods 
  private int CurrentSize; 
  
+ // constructor 
  public DoublyLinkedBag(){
      
      firstNode = null;
@@ -22,35 +23,32 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
     public int getCurrentSize(){
     return CurrentSize; 
  }
-	
-	
+
     @Override
     public boolean isEmpty(){
        return CurrentSize == 0; 
         }
 	
-	
     @Override
     public boolean add(T newEntry){
        DoublyLinkedNode newNode = new DoublyLinkedNode(newEntry);  
        
+       // both first and last point to same node if there is only one 
        if(isEmpty()){
         firstNode = newNode;
         lastNode = newNode; 
         }
        
        // adding from the front of the list 
-       
        else{ newNode.setNextNode(firstNode);
              firstNode.setPrevNode(newNode); 
              firstNode = newNode;
             }
-       
                  CurrentSize++; 
                  return true;       
         } 
       
-
+   // removes a node from the front of the DLlist 
     @Override
     public T remove(){
         
@@ -83,14 +81,16 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
          return result; 
         }
    
-
+    // removes the first instance of anEntry if found 
     @Override
     public boolean remove(T anEntry){
         
-       // checks if list contains anEntry, but also if it's empty 
+       /* checks if list contains anEntry
+       and also if it's empty(see getFrequencyOf method) */
        if(!contains(anEntry)) 
          return false; 
     
+     // set a reference pointer to node that contains anEntry in data
      DoublyLinkedNode removeThisNode = getReferenceTo(anEntry);  
      
      // anEntry on fistNode
@@ -139,6 +139,7 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
          return true; 
          
      }
+    // anEntry is somewhere in the middle 
      
        // dereference node to be removed 
        removeThisNode.getPrevNode().setNextNode(removeThisNode.getNextNode());
@@ -161,12 +162,13 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
              remove(); 
         }
 	
-	
+   // return number of occurances of anEntry  	
     @Override
     public int getFrequencyOf(T anEntry){
         int frequency = 0; 
         DoublyLinkedNode currentNode = firstNode; 
         int count = 0; 
+        // loop through list nodes, avoid nullPointerException 
         while(count< CurrentSize && currentNode !=null){
           if(anEntry.equals(currentNode.getData())){
               frequency++; 
@@ -177,10 +179,11 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
         return frequency; 
         }
 	
-	
+    // check DL list to see if any node's data matches anEntry 
     @Override
     public boolean contains(T anEntry){
         
+        // false if reference is null (empty list or reaches lastNode) 
         return getReferenceTo(anEntry)!= null; 
     }
     
@@ -188,26 +191,29 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
         
         DoublyLinkedNode currentNode = firstNode; 
         
-        // 
+        // an empty list has null firstode  
         if(isEmpty())
             return currentNode; 
         
-           int count = 0;
+        // loop through DL list and compare anEntry to data    
+        int count = 0;
             
             while(count < CurrentSize && currentNode !=null){
-                
-               // System.out.print(currentNode.getData());
-              //  System.out.println(" "+anEntry+" "+anEntry.equals(currentNode.getData()));
-                
+               
+   // code for testing 
+   // System.out.print(currentNode.getData());
+   // System.out.println(" "+anEntry+" "+anEntry.equals(currentNode.getData()));
+               
+                // return a reference to node with matching data 
                 if(anEntry.equals(currentNode.getData())){
                     return currentNode; 
                 } 
-                
+                // increment node and counter 
                 currentNode = currentNode.getNextNode(); 
                 count++;
                 
                 }
-        
+      // returns lastnode.getNextNode = null if loop reaches the end of list 
            return currentNode; 
     }
        
@@ -221,12 +227,14 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
           // nullPointerException 
           if(isEmpty()) 
               return result; 
-          
+         
+          // loop through DL list and populate Array 
           int count = 0; 
           while(count < CurrentSize && currentNode!=null){ 
               
              result[count] = currentNode.getData(); 
              
+             // increment node and counter 
              currentNode = currentNode.getNextNode();
              count++;
           }
@@ -240,15 +248,15 @@ private class DoublyLinkedNode{ // Private nested inner class
     private DoublyLinkedNode prev; 
     private DoublyLinkedNode next; 
    
-   
+   // no argument constructor 
    private DoublyLinkedNode(){ 
-     this(null,null,null); 
+     this(null,null,null); // passed to full constructor 
    }
-  
+  // data only constructor 
     private DoublyLinkedNode(T data){
-      this(null, data, null); 
+      this(null, data, null); // passed to full constructor 
     }
-   
+  // full constructor initializes all three node fields  
     private DoublyLinkedNode(DoublyLinkedNode prev, T data, DoublyLinkedNode next){
      this.data = data; 
      this.prev = prev; 

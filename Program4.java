@@ -13,6 +13,8 @@ public class Program4 {
     public static void main(String[] args) {
 
         Scanner kb = new Scanner(System.in);
+        
+        //Instantiate a SpellChecker 
         SpellChecker dictionary = new SpellChecker();
         boolean loop;  
         
@@ -21,7 +23,7 @@ public class Program4 {
         // dictionary FileNotFoundException loop 
         do{
         loop = false;    
-        System.out.print("Enter a dictonary file: ");
+        System.out.print("Enter a dictonary file path: ");
         File dictionaryFile = new File(kb.nextLine());
         
         // FileNotFoundException caught by setDirectory returns false 
@@ -40,7 +42,7 @@ public class Program4 {
             
         loop = false; 
         
-        System.out.print("Enter a word list file: ");
+        System.out.print("Enter a word list file path: ");
         
         File wordListFile = new File(kb.nextLine());
         
@@ -58,7 +60,7 @@ public class Program4 {
                 }
             }
             
-            // print statement it no words are mispelled 
+            // print statement if no words are mispelled 
             if (!misspelled) {
                 System.out.println("No Misspelled words in word list file.");
                 
@@ -101,7 +103,7 @@ public static void setOutPutFile(File wordListFile, SpellChecker dictionary)
         // loop for files that already exist. 
         do{
         loop = false; 
-        System.out.print("Enter an output file for misspelled words: ");
+        System.out.print("Enter an output file path for misspelled words: ");
         filename = kb.nextLine(); 
         
        // make sure file does not exist.  
