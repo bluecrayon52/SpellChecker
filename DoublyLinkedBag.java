@@ -37,31 +37,20 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
        if(isEmpty()){
         firstNode = newNode;
         lastNode = newNode; 
-        CurrentSize++; 
-        return true; 
-            }
+        }
        
        // adding from the front of the list 
        
-      else {
-        
-            try{
-                 newNode.setNextNode(firstNode);
-                 firstNode.setPrevNode(newNode); 
-                 firstNode = newNode;
+       else{ newNode.setNextNode(firstNode);
+             firstNode.setPrevNode(newNode); 
+             firstNode = newNode;
+            }
+       
                  CurrentSize++; 
-                 return true; 
-           
-                }catch(OutOfMemoryError e){
-                 System.out.println(e.getMessage());
-                 System.exit(0); 
-                }
+                 return true;       
         } 
       
-       return false; 
-    }
 
-	
     @Override
     public T remove(){
         
@@ -78,8 +67,6 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
          //if null, the list is now empty 
          if(firstNode == null)
             lastNode = null;
-            
-         
               
        // otherwise, dereference node to be removed 
          else{
@@ -179,12 +166,13 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
     public int getFrequencyOf(T anEntry){
         int frequency = 0; 
         DoublyLinkedNode currentNode = firstNode; 
-        
-        for(int i = 0; i < CurrentSize; i++){
+        int count = 0; 
+        while(count< CurrentSize && currentNode !=null){
           if(anEntry.equals(currentNode.getData())){
               frequency++; 
           }  
           currentNode = currentNode.getNextNode(); 
+          count++; 
         }
         return frequency; 
         }
@@ -204,21 +192,22 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
         if(isEmpty())
             return currentNode; 
         
-        else{
-            
-            int count = 0;
+           int count = 0;
             
             while(count < CurrentSize && currentNode !=null){
-          
+                
+               // System.out.print(currentNode.getData());
+              //  System.out.println(" "+anEntry+" "+anEntry.equals(currentNode.getData()));
+                
                 if(anEntry.equals(currentNode.getData())){
                     return currentNode; 
                 } 
                 
-                else currentNode = currentNode.getNextNode(); 
+                currentNode = currentNode.getNextNode(); 
                 count++;
                 
                 }
-        }
+        
            return currentNode; 
     }
        
@@ -233,11 +222,13 @@ public final class DoublyLinkedBag<T> implements BagInterface<T> {
           if(isEmpty()) 
               return result; 
           
-          for(int i = 0; i < CurrentSize; i++){ 
+          int count = 0; 
+          while(count < CurrentSize && currentNode!=null){ 
               
-             result[i] = currentNode.getData(); 
+             result[count] = currentNode.getData(); 
              
-             currentNode = currentNode.getNextNode(); 
+             currentNode = currentNode.getNextNode();
+             count++;
           }
           return result; 
         }

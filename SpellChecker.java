@@ -24,7 +24,7 @@ public class SpellChecker {
     try (Scanner readFile = new Scanner(correctWordFile)) {
         
               while(readFile.hasNext()){
-                  if(!correctWords.add(readFile.nextLine().toLowerCase())){
+                  if(!correctWords.add(readFile.nextLine().trim().toLowerCase())){
                       System.out.println("Could not add words to Dictionary.");
                       System.exit(0);
                   }
@@ -50,4 +50,20 @@ public class SpellChecker {
         return correctWords.getCurrentSize();     
     }
    
+    public void test(String word){
+      
+      // tests the contains and Remove anEntry method 
+        System.out.println(correctWords.contains(word));
+        correctWords.remove(word); 
+     // test toArray method 
+        System.out.println(Arrays.toString(correctWords.toArray()));
+     // test remove method 
+        System.out.println(correctWords.remove()); 
+        System.out.println(Arrays.toString(correctWords.toArray()));
+     //test getFrequencyOf anyEntry method 
+        System.out.println(correctWords.getFrequencyOf(word));
+     // test clear method 
+        correctWords.clear(); 
+        System.out.println(Arrays.toString(correctWords.toArray()));
+    }
 }
